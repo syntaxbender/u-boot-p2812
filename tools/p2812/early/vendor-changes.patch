@@ -1,0 +1,89 @@
+--- a/vendor/nand_ecc.c
++++ b/vendor/nand_ecc.c
+@@ -104,7 +104,8 @@
+ 	/* Calculate final ECC code */
+ 	ecc_code[0] = ~tmp1;
+ 	ecc_code[1] = ~tmp2;
+-	ecc_code[2] = ((~reg1) << 2) | 0x03;
++	/* P2812 port: keep the original byte result without signed-shift UB. */
++	ecc_code[2] = ((uint32_t)(uint8_t)~reg1 << 2) | 0x03;
+ 
+ 	return 0;
+ }
+--- a/vendor/lzo1x_decompress.c
++++ b/vendor/lzo1x_decompress.c
+@@ -1,4 +1,7 @@
+ /*
++ * Local 2026 P2812 port: explicit input checks before token/offset reads.
++ * Container parser above is unlinked; only the block decoder is used.
++ *
+  *  LZO1X Decompressor from MiniLZO
+  *
+  *  Copyright (C) 1996-2005 Markus F.X.J. Oberhumer <markus@oberhumer.com>
+@@ -33,7 +36,7 @@
+ 
+ bool lzop_is_valid_header(const unsigned char *src)
+ {
+-	int i;
++	unsigned int i;
+ 	/* read magic: 9 first bytes */
+ 	for (i = 0; i < ARRAY_SIZE(lzop_magic); i++) {
+ 		if (*src++ != lzop_magic[i])
+@@ -149,6 +152,8 @@
+ 
+ 	*out_len = 0;
+ 
++	if (in_len == 0)
++		goto input_overrun;
+ 	if (*ip > 17) {
+ 		t = *ip++ - 17;
+ 		if (t < 4)
+@@ -207,9 +212,13 @@
+ 		}
+ 
+ first_literal_run:
++		if (HAVE_IP(1, ip_end, ip))
++			goto input_overrun;
+ 		t = *ip++;
+ 		if (t >= 16)
+ 			goto match;
++		if (HAVE_IP(1, ip_end, ip))
++			goto input_overrun;
+ 		m_pos = op - (1 + M2_MAX_OFFSET);
+ 		m_pos -= t >> 2;
+ 		m_pos -= *ip++ << 2;
+@@ -228,6 +237,8 @@
+ 		do {
+ match:
+ 			if (t >= 64) {
++				if (HAVE_IP(1, ip_end, ip))
++					goto input_overrun;
+ 				m_pos = op - 1;
+ 				m_pos -= (t >> 2) & 7;
+ 				m_pos -= *ip++ << 3;
+@@ -250,6 +261,8 @@
+ 					}
+ 					t += 31 + *ip++;
+ 				}
++				if (HAVE_IP(2, ip_end, ip))
++					goto input_overrun;
+ 				m_pos = op - 1;
+ 				m_pos -= get_unaligned_le16(ip) >> 2;
+ 				ip += 2;
+@@ -269,12 +282,16 @@
+ 					}
+ 					t += 7 + *ip++;
+ 				}
++				if (HAVE_IP(2, ip_end, ip))
++					goto input_overrun;
+ 				m_pos -= get_unaligned_le16(ip) >> 2;
+ 				ip += 2;
+ 				if (m_pos == op)
+ 					goto eof_found;
+ 				m_pos -= 0x4000;
+ 			} else {
++				if (HAVE_IP(1, ip_end, ip))
++					goto input_overrun;
+ 				m_pos = op - 1;
+ 				m_pos -= t >> 2;
+ 				m_pos -= *ip++ << 2;

@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0+
+obj-$(CONFIG_LANTIQ_ASC_SERIAL) += serial_lantiq_asc.o
 #
 # (C) Copyright 2006-2009
 # Wolfgang Denk, DENX Software Engineering, wd@denx.de.

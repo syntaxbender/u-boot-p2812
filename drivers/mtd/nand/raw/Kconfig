@@ -3,6 +3,15 @@ menuconfig MTD_RAW_NAND
 
 if MTD_RAW_NAND
 
+config NAND_LANTIQ_RO
+	bool "Experimental P2812 VRX200 read-only NAND"
+	depends on TARGET_P2812HNUF1_RAM
+	select SYS_NAND_SELF_INIT
+	help
+	  Explicit-probe diagnostic driver, software Hamming ECC, no persistent
+	  writes. Low-level bus cycles reject program/erase/feature-write commands.
+	  Use ltqnand to probe, calculate CRCs or read into bounded uncached RAM.
+
 config SYS_NAND_SELF_INIT
 	bool
 	help

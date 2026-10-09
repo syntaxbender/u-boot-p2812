@@ -6,6 +6,12 @@
 
 #ifndef USE_HOSTCC
 #include <bootm.h>
+#if defined(CONFIG_TARGET_P2812HNUF1_RAM)
+#include <asm/addrspace.h>
+#endif
+#if defined(CONFIG_CMD_P2812_LINUXRUN)
+#include <mach/p2812_linux.h>
+#endif
 #include <bootstage.h>
 #include <dm/root.h>
 #include <cli.h>
@@ -628,7 +634,11 @@ static int handle_decomp_error(int comp_type, size_t uncomp_size,
 	 * their bounds. Probably it is not necessary to reset, but maintain
 	 * the current behaviour for now.
 	 */
-	printf("Must RESET board to recover\n");
+	if (IS_ENABLED(CONFIG_CMD_P2812_NANDBOOTCHECK) ||
+	    IS_ENABLED(CONFIG_CMD_P2812_LINUXRUN))
+		printf("Decompression failed; returning to console\n");
+	else
+		printf("Must RESET board to recover\n");
 #ifndef USE_HOSTCC
 	bootstage_error(BOOTSTAGE_ID_DECOMP_IMAGE);
 #endif
@@ -748,6 +758,14 @@ static int bootm_load_os(struct bootm_headers *images, int boot_progress)
 		phys_addr_t load;
 
 		load = (phys_addr_t)images->os.load;
+#if defined(CONFIG_TARGET_P2812HNUF1_RAM)
+		/* This RAM port relocates and registers DRAM through KSEG1.
+		 * A Linux uImage still uses its standard KSEG0 load/entry.
+		 * Reserve the same physical memory through the DRAM-map alias;
+		 * keep the image load address and kernel entry unchanged.
+		 */
+		load = CKSEG1ADDR(load);
+#endif
 		err = lmb_alloc_mem(LMB_MEM_ALLOC_ADDR, 0, &load,
 				    (load_end - images->os.load), LMB_NONE);
 		if (err) {
@@ -755,6 +773,9 @@ static int bootm_load_os(struct bootm_headers *images, int boot_progress)
 				images->os.load);
 			return 1;
 		}
+#if defined(CONFIG_CMD_P2812_LINUXRUN)
+		p2812_linux_lmb_record(load, load_end - images->os.load);
+#endif
 	}
 
 	return 0;
@@ -1156,8 +1177,13 @@ err:
 	if (ret == BOOTM_ERR_UNIMPLEMENTED) {
 		bootstage_error(BOOTSTAGE_ID_DECOMP_UNIMPL);
 	} else if (ret == BOOTM_ERR_RESET) {
-		printf("Resetting the board...\n");
-		reset_cpu();
+		if (IS_ENABLED(CONFIG_CMD_P2812_NANDBOOTCHECK) ||
+		    IS_ENABLED(CONFIG_CMD_P2812_LINUXRUN)) {
+			printf("Boot error; reset suppressed; returning to console\n");
+		} else {
+			printf("Resetting the board...\n");
+			reset_cpu();
+		}
 	}
 
 	return ret;

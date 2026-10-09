@@ -1,0 +1,57 @@
+{
+  "profile": "p2812-research-baseline-v1",
+  "upstream_repository": "https://github.com/u-boot/u-boot",
+  "upstream_commit": "5508406582f6f7120dce0c4b3059819a41788db2",
+  "defconfig": "p2812hnuf1_nandboot2_defconfig",
+  "source_date_epoch": 1791504000,
+  "builder_image_id": "sha256:e083e25f46d29939296862c5841cc6d14fb8559a1ec6c3be9ea11d34064bce00",
+  "builder_archive_sha256": "7d170c00b86fbd74b457f1a173b79fb0eafe9579034534813cefc5d4c99afed2",
+  "unicorn_wheel": {
+    "filename": "unicorn-2.1.4-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "sha256": "9d6e6dea140560de4ebd8446661f7ef84a357d428c14a3ef09dacd306ec8c239"
+  },
+  "main_files_sha256": {
+    "arch/mips/Kconfig": "81864003bb88a8966248047c7a71a5e17f1ca0b692e5231cbd1234b27111a721",
+    "arch/mips/Makefile": "524712be0e649865d95bdf4f67c6856fc26bc04f62c4f45880e6ac0f8ed04710",
+    "arch/mips/dts/Makefile": "7eebd085abebf72111ff4ab98b1cfdbe067ccf1f2ae8550d8a158cbae294f0ea",
+    "arch/mips/dts/lantiq-p2812hnu-f1-ram.dts": "19654af221d1981737146bac6c1fc7e0b65add08d99b8c1ecbf1ac93ab35e403",
+    "arch/mips/mach-lantiq/Kconfig": "c3f4bce3b87e6e507a2216fdf85649909513819142260a0c5a45b3920a8129e1",
+    "arch/mips/mach-lantiq/Makefile": "b4d7e91b9f062628c72829045e4a6da99aade6cb9c1583d28df4c558561adef3",
+    "arch/mips/mach-lantiq/clock.c": "c4e1cc0aca905221bc45f2d7eb5fd2266dc148e11001d89137e2adf6586ebbe1",
+    "arch/mips/mach-lantiq/include/mach/vrx200.h": "c2160231baf76ee5cab0f607f8ca3b8962b3ce6e4a6205a9e37011ab5689d655",
+    "board/zyxel/p2812hnuf1/Kconfig": "051fb2b3410f28908ad4c1ae37e26e42b108360f5cf730c7fc8190b31145bcfd",
+    "board/zyxel/p2812hnuf1/Makefile": "b83516700e07d1a468c5c48ffaa0ac5cd16d7aec1097fbff3b627e5e1d330e82",
+    "board/zyxel/p2812hnuf1/p2812hnuf1.c": "b842b7ddebfc5198b19dc2d807e6cf70b5eef17d6322e02142d5a37f525e6b1b",
+    "drivers/serial/Kconfig": "60a9da5e1394761904974743ccb508faa3274a829ecbc8b59adaa452d4240f56",
+    "drivers/serial/Makefile": "5f7357c701728b5879ac73e5eac2cda19af02f2cca32f2e3624baf7554aeb2b2",
+    "drivers/serial/serial_lantiq_asc.c": "9d4d8a461192a9c76bad89fef3aa423910bf344b7f2cccfcccfee22ea916480c",
+    "include/configs/p2812hnuf1_ram.h": "6ab6327db1905d37781cc975713797215d1a377a7222d74035a103ff67b14a11",
+    "arch/mips/mach-lantiq/include/mach/nand_ro.h": "554e19c4ff7decb6c06ab620034b5882e590fd90d9294158591d516ad636769f",
+    "cmd/Makefile": "50ffdbb925d93f2eebc29772c56ed6ae815196f7fd2d5f4326b3f166459bf7a7",
+    "cmd/ltqnand.c": "3a002008d28c6cd5f014e6d8ce3977002ed1069faabc2f6c4ce55fdaf26a938d",
+    "drivers/mtd/nand/raw/Kconfig": "d708af7228325aa84feae455a9bcbf2d01dd5e6f6dcde589ef470b3ae186d31b",
+    "drivers/mtd/nand/raw/Makefile": "d0ea5589daf03997846494e3ae5066c80025ae9c7549a4562fee2a04989d869e",
+    "drivers/mtd/nand/raw/lantiq_nand_ro.c": "a5c8d9c2956b8fac577810e9fbcb925e1eefb3b972510c6dd4cd743d44641849",
+    "boot/bootm.c": "50a3f609be3aca8423c4090ed7f8d8ec9ae58f93f3d7f6a236c8a0efe4f1d1f4",
+    "board/zyxel/p2812hnuf1/nand_kernel.c": "7829ceed7c7809589918b536de456c2083a54bf1b3e7286d762ea4c32547d02f",
+    "board/zyxel/p2812hnuf1/nand_bootcheck.c": "254aeee4b59908e2240aa8c72c3defa772391371f0a6751ad3db410a48431f68",
+    "board/zyxel/p2812hnuf1/nand_kernel.h": "71e83029c792fb729063bee45e10805590bf862ca18e205b0987353eb1334782",
+    "configs/p2812hnuf1_nandboot2_defconfig": "52d3ad85471c81232ca86aab47adb0babbae6709872035ba06128a8f422f05fd"
+  },
+  "expected_outputs": {
+    "package/u-boot.bin": "56789f2e2a526e7bea7e11ce3c98245f64001d611b8be03b4c671ce6e1a20a9d",
+    "package/u-boot.uImage": "66549b909ca4773320b6c00a7c066547920870ccde1839d498ae635149b84bc4",
+    "early/spl.bin": "112d1520b6a38960e61129d55824839c909d38ac8f012247d8424061c500448e",
+    "early/tpl.bin": "d4b8fd9f86f3f160ae29f64bae66952d702c119d4aa35e5fcbf6e21156a46470",
+    "package/nandsource4-main-area.img": "ce02f8a1ca28ec901aa9efb480e2484912685d1a290744a693feffe71fb70d90",
+    "package/boot-main-256k.bin": "a8be7894598553d169abe967e4d3a4a8702ec2bb00686a3e4fe68a4694d8f315",
+    "package/boot-main-oob.bin": "5b42113909b85b6e9890036d5aaad5d753c1821bb0bb49be21d064acd6bda29d"
+  },
+  "hardware_status": {
+    "nand_write_readback_verified": true,
+    "modern_console_observed_after_reported_normal_power_cycle": true,
+    "full_rom_coldboot_trace_captured": false,
+    "default_linux_execution": false,
+    "production_ready": false
+  }
+}
