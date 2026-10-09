@@ -1,0 +1,78 @@
+// SPDX-License-Identifier: GPL-2.0+
+/* Experimental P-2812HNU-F1 RAM board; persistent environment absent. */
+#include <command.h>
+#include <init.h>
+#include <stdio.h>
+#include <time.h>
+#include <asm/global_data.h>
+#include <asm/mipsregs.h>
+#include <asm/io.h>
+#include <linux/sizes.h>
+#include <mach/vrx200.h>
+
+DECLARE_GLOBAL_DATA_PTR;
+
+int dram_init(void)
+{
+	/* Board RAM was initialized by the proven UART GCT DDR records. */
+	gd->ram_size = SZ_128M;
+	return 0;
+}
+
+int checkboard(void)
+{
+	puts("Board: Zyxel P-2812HNU-F1 - experimental RAM-only port\n");
+	printf("Clocks: CPU %lu Hz, FPI %lu Hz, CP0 Count %lu Hz\n",
+	       ltq_vrx200_cpu_rate(), ltq_vrx200_bus_rate(), get_tbclk());
+	return 0;
+}
+
+/* Legacy external-PHY setup also initialized these pins. The minimal port
+ * has no Ethernet driver, so establish the MDIO/MDC handoff explicitly.
+ * GPIO42/43 are bank2 bits10/11; preserve all other pins. XWAY OD=1
+ * corresponds to the Linux pinctrl open-drain=0 setting. */
+static void p2812_mdio_pins_init(void)
+{
+	const u32 mask = 0x00000c00;
+
+	setbits_be32((void __iomem *)0xbe100b7c, mask); /* ALTSEL0 */
+	clrbits_be32((void __iomem *)0xbe100b80, mask); /* ALTSEL1 */
+	setbits_be32((void __iomem *)0xbe100b84, mask); /* OD */
+	setbits_be32((void __iomem *)0xbe100b78, mask); /* DIR */
+}
+
+/* Legacy board_eth_init selected PLL0-derived 25 MHz for both internal
+ * GPHYs. Linux loads their firmware, but relies on this clock handoff
+ * when no explicit phy-clk-src override is present in the device tree. */
+static void p2812_gphy_clock_init(void)
+{
+	clrsetbits_be32((void __iomem *)0xbf103024, 0x0000001c, 0x00000008);
+}
+
+int board_early_init_r(void)
+{
+	p2812_mdio_pins_init();
+	p2812_gphy_clock_init();
+	if (IS_ENABLED(CONFIG_NAND_LANTIQ_RO))
+		puts("RAM prototype: NAND explicit-probe/read-only; persistent env absent\n");
+	else
+		puts("RAM prototype: NAND/flash drivers and persistent env absent\n");
+	return 0;
+}
+
+static int do_ltqinfo(struct cmd_tbl *cmdtp, int flag, int argc,
+		      char *const argv[])
+{
+	printf("CONFIG0=%08x K0_CCA=%u L1I_LINE=%u L1D_LINE=%u\n",
+	       read_c0_config(), read_c0_config() & CONF_CM_CMASK,
+	       gd->arch.l1i_line_size, gd->arch.l1d_line_size);
+	printf("CGU_SYS=%08x CPU=%lu FPI=%lu CP0_HZ=%lu COUNT=%u\n",
+	       ltq_vrx200_clock_config(), ltq_vrx200_cpu_rate(),
+	       ltq_vrx200_bus_rate(), get_tbclk(), read_c0_count());
+	printf("RAM=%lu bytes RELOC=%08lx SP=%08lx\n",
+	       (ulong)gd->ram_size, gd->relocaddr, gd->start_addr_sp);
+	return 0;
+}
+
+U_BOOT_CMD(ltqinfo, 1, 1, do_ltqinfo,
+	   "show RAM prototype clocks and relocation (read only)", "");

@@ -1,0 +1,14 @@
+if ARCH_LANTIQ
+
+config SYS_SOC
+	default "lantiq"
+
+config TARGET_P2812HNUF1_RAM
+	bool "Zyxel P-2812HNU-F1 ROM UART RAM prototype"
+	select LANTIQ_ASC_SERIAL
+	select DISPLAY_BOARDINFO
+	select BOARD_EARLY_INIT_R
+
+source "board/zyxel/p2812hnuf1/Kconfig"
+
+endif

@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0+
 
 dtb-$(CONFIG_TARGET_AP121) += ap121.dtb
+dtb-$(CONFIG_TARGET_P2812HNUF1_RAM) += lantiq-p2812hnu-f1-ram.dtb
 dtb-$(CONFIG_TARGET_AP143) += ap143.dtb
 dtb-$(CONFIG_TARGET_AP152) += ap152.dtb
 dtb-$(CONFIG_TARGET_MALTA) += mti,malta.dtb

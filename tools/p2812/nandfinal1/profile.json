@@ -1,0 +1,32 @@
+{
+  "baseline_commit": "3eed371df72ae3a36ca76feb8372f027fdf2d5cb",
+  "bootdelay_seconds": 5,
+  "builder_alternate_image_ids": [
+    "sha256:cdc7020a06d091473bd1eac8497a5bf5a8f73aa4f7466bdae79bd6eaceeb22ad",
+    "sha256:46310ceafb96d03268975aa2440a7cc8ba6733d684781d0aab4a9a36cc05b32e"
+  ],
+  "builder_image_id": "sha256:e083e25f46d29939296862c5841cc6d14fb8559a1ec6c3be9ea11d34064bce00",
+  "builder_packages_sha256": "6f4a59cb1cd8a53f8bf7ad5e29413b48b5b5b2f0cf8dfae71243886a7f501635",
+  "builder_recipe_sha256": "050eeb73230621fbadeed0fa7fb11ec6123750432cf8b1e8c9cb72d58803d9fc",
+  "default_bootcommand": "nandbootrun",
+  "defconfig": "p2812hnuf1_nandfinal1_defconfig",
+  "prior_hardware_tested_source_commit": "5cd83982d0061aee644e7201ad6a5d3172ce8669",
+  "profile": "p2812-nandfinal1",
+  "public_inputs": {
+    "initramfs.bin": {
+      "filename": "openwrt-25.12.0-lantiq-xrx200-zyxel_p-2812hnu-f1-initramfs-kernel.bin",
+      "sha256": "b0ec7302744076eef38ee0df732fb715ae108ab36327f334a9f5537c788be382"
+    },
+    "sysupgrade.bin": {
+      "filename": "openwrt-25.12.0-lantiq-xrx200-zyxel_p-2812hnu-f1-squashfs-sysupgrade.bin",
+      "sha256": "d609efe3791f8c064e06f7450a3cbc453cae066f2d6c6dd218b9707f12e8cd72"
+    }
+  },
+  "source_date_epoch": 1791504000,
+  "unicorn_wheel": {
+    "filename": "unicorn-2.1.4-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "sha256": "9d6e6dea140560de4ebd8446661f7ef84a357d428c14a3ef09dacd306ec8c239"
+  },
+  "upstream_commit": "5508406582f6f7120dce0c4b3059819a41788db2",
+  "upstream_repository": "https://github.com/u-boot/u-boot"
+}

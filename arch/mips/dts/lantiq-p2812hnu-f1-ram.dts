@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: GPL-2.0+
+/dts-v1/;
+
+/ {
+	model = "Zyxel P-2812HNU-F1 experimental RAM U-Boot";
+	compatible = "zyxel,p-2812hnu-f1", "lantiq,vrx200";
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	aliases {
+		serial0 = &asc1;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	memory@0 {
+		device_type = "memory";
+		reg = <0 0x08000000>;
+	};
+
+	asc1: serial@1e100c00 {
+		compatible = "lantiq,asc";
+		reg = <0x1e100c00 0x100>;
+		bootph-all;
+	};
+};
