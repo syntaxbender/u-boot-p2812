@@ -1,0 +1,181 @@
+{
+  "exported_from": "NANDSOURCE4",
+  "note": "Final compiled early sources only. Historical sources are recorded as provenance, not build inputs.",
+  "source_files_sha256": {
+    "GPL-2.0.txt": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "clock.c": "92fd63ae8752f042e4d6448c71580bd49841359a2e91a569df21caa52a914aff",
+    "early.h": "b0ccec9b2614aa2c6caf186a3a2f2b6dfe6f3f67757cca546aa37b6fb2f4c358",
+    "ebu.c": "0f491ac4732a6e6a82590e0e23d4a004056ee2421ca4c42e96d48da989561267",
+    "image.c": "c46ae244be830c6d264e6e7000f059617df58f2ebc391e8d8205894138af9f3e",
+    "include/asm/byteorder.h": "d26f34e3c0489f732a88af5a5d888f360d0632a673116aa7be62d8d5ddd4b886",
+    "include/asm/unaligned.h": "3e859c690eaf7b8e4c6fe5f4b9cdad936bb2ea45d46111f0573ede1c4e7f4f90",
+    "include/linux/errno.h": "3365f96e663a3211de0039102a8bda507be529f4c53483c7c53de49fc1cbe4d5",
+    "include/linux/kernel.h": "c715a5f1b13336523c8eea2f211b7e9b8d246c8a861dfd4d2310b5c54c8c71c9",
+    "include/linux/lzo.h": "b194d08d2b45f6c2734908a3a606d9c0c1511a0137fd6bfb5f3612cb6b9da486",
+    "include/linux/mtd/mtd.h": "8739d3d9cd164726d23cdd809a6fd3aa46a9cf87edcdf692656716a035e53dfc",
+    "include/linux/mtd/nand_ecc.h": "2bdf9600cf676cdcc4db520cc0a8efe233aac5d71d0cdd54c96b4d79cf35f378",
+    "include/linux/string.h": "d26f34e3c0489f732a88af5a5d888f360d0632a673116aa7be62d8d5ddd4b886",
+    "memory.c": "11627956e69a84d1aa42ee5f36a2724c063446b49a52926006da3bba84adc680",
+    "nand.c": "3abd4458fe8753aa81db8d685dd2f5d19519dd11e141894a8f9b0d872dd4a146",
+    "runtime.c": "ad07cf20c5fa4d770020580201a5416452e23b1e1c98a96a67fccc7e53935ceb",
+    "soc.c": "9e152c40c068caa564c0c452dc4a84b2866d38412b3b8bd2580211e3d0061d79",
+    "spl.c": "f9b48fd1035fb298a8d3c7f2f77675423ddc07528373b0c48364ca20aceff36e",
+    "spl.lds": "96823358bc6a922183b7e38c3b90d1a332e9eb5e014051523aec210219160003",
+    "start.S": "be2351593530a22c3a9cd8d95aa322087ec9f912da24463c74c468008bc58da6",
+    "stats.h": "886a1121506719f0414943dc0bbdb475799c798f38b9b0e7f6832a74fd1dd455",
+    "tpl.c": "65bff6526358f4fea5bfc1f9d151c77b541894be1a74dc0e52a290d063a69166",
+    "tpl.lds": "2b71c4308e5cc75cf66fb499a6105fffe309ecdee509546db23a635e276670ac",
+    "trace.c": "c36e8cbe300ff42e5e647446433e97563d5448483052ff6dd262c3d41a409637",
+    "trace.h": "317227205c90662414ab78f814ee0c5d629d4a66ac065c0451c98d9ffd46866d",
+    "vendor/ddr_settings.h": "84059153e4a4ae14d9169f968afdb8fbf2e5f372143a9400dcca4ab09d8ab7d1",
+    "vendor/lzo.h": "10c69c70f20cd5b13c3ba29b8d740e7a2ddd8de735d5d2125953d04633715822",
+    "vendor/lzo1x_decompress.c": "d2fd307b375a6ac3f232e64a59d494213c11aabcf87d0c64ac81c6ad070534c1",
+    "vendor/lzodefs.h": "8d586d3bd36be2a6b34ae9debf5c67b2cb4708f90aa3afe9e3d4cb3a45a8ecbd",
+    "vendor/nand_ecc.c": "45695fe34614e7921d98c35d0a94fb7d2b615a321fdd4a1035cffe002ed7501a",
+    "vendor-changes.patch": "19f3eac6b20ec0b702162ffe4130171deebc3f868c22f26a3f3c94796fcd19ca"
+  },
+  "primary_origins": [
+    {
+      "repository": "u-boot-lantiq",
+      "commit": "74c232cced671fb17d2976ced957261fa9be28b7",
+      "path": "board/zyxel/p2812hnufx/ddr_settings.h",
+      "export": "vendor/ddr_settings.h",
+      "original_sha256": "84059153e4a4ae14d9169f968afdb8fbf2e5f372143a9400dcca4ab09d8ab7d1",
+      "export_sha256": "84059153e4a4ae14d9169f968afdb8fbf2e5f372143a9400dcca4ab09d8ab7d1"
+    },
+    {
+      "repository": "u-boot-2026.10",
+      "commit": "5508406582f6f7120dce0c4b3059819a41788db2",
+      "path": "drivers/mtd/nand/raw/nand_ecc.c",
+      "export": "vendor/nand_ecc.c",
+      "original_sha256": "81204bbf984bfc5e53b26521596f914a8db865d64b5096d14bea30c71ec6157d",
+      "export_sha256": "45695fe34614e7921d98c35d0a94fb7d2b615a321fdd4a1035cffe002ed7501a"
+    },
+    {
+      "repository": "u-boot-2026.10",
+      "commit": "5508406582f6f7120dce0c4b3059819a41788db2",
+      "path": "lib/lzo/lzo1x_decompress.c",
+      "export": "vendor/lzo1x_decompress.c",
+      "original_sha256": "7c7a0714637b6635c08f8dceac30c67cced1f8c846aac992c24c1da45daaa62e",
+      "export_sha256": "d2fd307b375a6ac3f232e64a59d494213c11aabcf87d0c64ac81c6ad070534c1"
+    },
+    {
+      "repository": "u-boot-2026.10",
+      "commit": "5508406582f6f7120dce0c4b3059819a41788db2",
+      "path": "lib/lzo/lzodefs.h",
+      "export": "vendor/lzodefs.h",
+      "original_sha256": "8d586d3bd36be2a6b34ae9debf5c67b2cb4708f90aa3afe9e3d4cb3a45a8ecbd",
+      "export_sha256": "8d586d3bd36be2a6b34ae9debf5c67b2cb4708f90aa3afe9e3d4cb3a45a8ecbd"
+    },
+    {
+      "repository": "u-boot-2026.10",
+      "commit": "5508406582f6f7120dce0c4b3059819a41788db2",
+      "path": "include/linux/lzo.h",
+      "export": "vendor/lzo.h",
+      "original_sha256": "10c69c70f20cd5b13c3ba29b8d740e7a2ddd8de735d5d2125953d04633715822",
+      "export_sha256": "10c69c70f20cd5b13c3ba29b8d740e7a2ddd8de735d5d2125953d04633715822"
+    },
+    {
+      "repository": "u-boot-lantiq",
+      "commit": "74c232cced671fb17d2976ced957261fa9be28b7",
+      "path": "arch/mips/include/asm/arch-vrx200/config.h",
+      "export": "reference/config.h",
+      "original_sha256": "504402ea6b0386e278da472c93fef132fe37ed86291a87305236bca39b259b22",
+      "use": "Primary source, register/layout provenance; adapted into standalone C",
+      "export_sha256": "504402ea6b0386e278da472c93fef132fe37ed86291a87305236bca39b259b22"
+    },
+    {
+      "repository": "u-boot-lantiq",
+      "commit": "74c232cced671fb17d2976ced957261fa9be28b7",
+      "path": "arch/mips/cpu/mips32/vrx200/mem_init.S",
+      "export": "reference/mem_init.S",
+      "original_sha256": "e0f88cb82986f5b2f588c5b1fc0be9441dc3e5f69db7c8c8cb1b7a53d21ef274",
+      "use": "Primary source, register/layout provenance; adapted into standalone C",
+      "export_sha256": "e0f88cb82986f5b2f588c5b1fc0be9441dc3e5f69db7c8c8cb1b7a53d21ef274"
+    },
+    {
+      "repository": "u-boot-lantiq",
+      "commit": "74c232cced671fb17d2976ced957261fa9be28b7",
+      "path": "arch/mips/cpu/mips32/vrx200/cgu_init.S",
+      "export": "reference/cgu_init.S",
+      "original_sha256": "b873fd2187b1c044f315dbe8b14175b5d79ca5195ba8dc62ca5709d288bcae42",
+      "use": "Primary source, register/layout provenance; adapted into standalone C",
+      "export_sha256": "b873fd2187b1c044f315dbe8b14175b5d79ca5195ba8dc62ca5709d288bcae42"
+    },
+    {
+      "repository": "u-boot-lantiq",
+      "commit": "74c232cced671fb17d2976ced957261fa9be28b7",
+      "path": "tools/ltq-boot-image.c",
+      "export": "reference/ltq-boot-image.c",
+      "original_sha256": "63eea5d2c278328763a50528ede18411f8642852b7b2f81ecd3b8b6bf9a8d9e6",
+      "use": "Primary source, register/layout provenance; adapted into standalone C",
+      "export_sha256": "63eea5d2c278328763a50528ede18411f8642852b7b2f81ecd3b8b6bf9a8d9e6"
+    },
+    {
+      "repository": "u-boot-lantiq",
+      "commit": "74c232cced671fb17d2976ced957261fa9be28b7",
+      "path": "arch/mips/cpu/mips32/vrx200/ebu.c",
+      "export": "reference/ebu.c",
+      "original_sha256": "c1ac05bb3ee10907cc10baeffcef700dfeb61e1aed667d775b3643542a1178ec",
+      "export_sha256": "c1ac05bb3ee10907cc10baeffcef700dfeb61e1aed667d775b3643542a1178ec",
+      "use": "Historical non-NOR REGEN clear; related INCA CLC bit1 supports inherited conservative filter, not independent VRX200 verification"
+    },
+    {
+      "repository": "u-boot-lantiq",
+      "commit": "74c232cced671fb17d2976ced957261fa9be28b7",
+      "path": "arch/mips/include/asm/inca-ip.h",
+      "export": "reference/inca-ip.h",
+      "original_sha256": "51b9a3d971b96cc57a3d2caa41ad20f1c37f407209e5b93415ba23413b64573f",
+      "export_sha256": "51b9a3d971b96cc57a3d2caa41ad20f1c37f407209e5b93415ba23413b64573f",
+      "use": "Historical non-NOR REGEN clear; related INCA CLC bit1 supports inherited conservative filter, not independent VRX200 verification"
+    },
+    {
+      "repository": "u-boot-lantiq",
+      "commit": "74c232cced671fb17d2976ced957261fa9be28b7",
+      "path": "arch/mips/cpu/mips32/vrx200/cgu.c",
+      "export": "reference/cgu.c",
+      "original_sha256": "8949fce28d0bdf9edbc4fb5b486aa24b2a652d237f8eabce4923e007fb3dc2cd",
+      "export_sha256": "8949fce28d0bdf9edbc4fb5b486aa24b2a652d237f8eabce4923e007fb3dc2cd",
+      "use": "Primary PLL1 lock definition; no restart/fallback ported"
+    },
+    {
+      "repository": "local-project",
+      "origin": "hardware-verified ROMDDR1",
+      "evidence": "research/analysis/modern-romddr1-20261017-attempt1-observation.json",
+      "export": "reference/romddr1-loader.c",
+      "original_sha256": "1282a21cf47a54fc992228cd80398679850d5ddd993cc740eb98423a2f43aad1",
+      "export_sha256": "1282a21cf47a54fc992228cd80398679850d5ddd993cc740eb98423a2f43aad1",
+      "use": "Separate clock/DDR/alias/memory ancestry; integrated NAND path remains untested"
+    },
+    {
+      "repository": "local-project",
+      "origin": "hardware-verified ROMDDR1",
+      "evidence": "research/analysis/modern-romddr1-20261017-attempt1-observation.json",
+      "export": "reference/romddr1-soc.c",
+      "original_sha256": "31a3beeaf30f0e5dc56eab6e7eb87ae8aafbe3e8d06e62dbabc69e410e070f95",
+      "export_sha256": "31a3beeaf30f0e5dc56eab6e7eb87ae8aafbe3e8d06e62dbabc69e410e070f95",
+      "use": "Separate clock/DDR/alias/memory ancestry; integrated NAND path remains untested"
+    },
+    {
+      "repository": "local-project",
+      "origin": "hardware-verified ROMDDR1",
+      "evidence": "research/analysis/modern-romddr1-20261017-attempt1-observation.json",
+      "export": "reference/romddr1-trace.c",
+      "original_sha256": "c36e8cbe300ff42e5e647446433e97563d5448483052ff6dd262c3d41a409637",
+      "export_sha256": "c36e8cbe300ff42e5e647446433e97563d5448483052ff6dd262c3d41a409637",
+      "use": "Separate clock/DDR/alias/memory ancestry; integrated NAND path remains untested"
+    }
+  ],
+  "model_fixtures": [
+    {
+      "file": "tests/fixtures/rom-uart-entry.json",
+      "origin": "ROMSRAM4 measured entry_words only",
+      "observation_sha256": "33cbd93f2b1672a7f841f5384a949d6054c4e70428e2334e39c0bd229d22a352"
+    },
+    {
+      "file": "tests/fixtures/rom-ddr-clock.json",
+      "origin": "ROMDDR1 measured clock_words and ready_words only",
+      "observation_sha256": "f771ffcc7702c3d361386e81fdd8a5587c5eeee115d89bc6d6f7c39587f64ded"
+    }
+  ]
+}

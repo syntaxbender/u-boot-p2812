@@ -46,6 +46,19 @@ config ARCH_ATH79
 	select OF_CONTROL
 	imply CMD_DM
 
+config ARCH_LANTIQ
+	bool "Support Lantiq VRX200 (experimental RAM boot)"
+	select DM
+	select DM_SERIAL
+	select OF_CONTROL
+	select MIPS_TUNE_34KC
+	select SUPPORTS_CPU_MIPS32_R2
+	select SUPPORT_BIG_ENDIAN
+	select SKIP_LOWLEVEL_INIT
+	help
+	  Experimental RAM-only support. DDR must already be initialized by
+	  the ROM UART GCT upload. No NAND, PLL or power-controller driver.
+
 config ARCH_MSCC
 	bool "Support MSCC VCore-III"
 	select HAS_FIXED_TIMER_FREQUENCY
@@ -197,6 +210,7 @@ source "board/imgtec/boston/Kconfig"
 source "board/imgtec/malta/Kconfig"
 source "board/imgtec/xilfpga/Kconfig"
 source "arch/mips/mach-ath79/Kconfig"
+source "arch/mips/mach-lantiq/Kconfig"
 source "arch/mips/mach-mscc/Kconfig"
 source "arch/mips/mach-bmips/Kconfig"
 source "arch/mips/mach-jz47xx/Kconfig"

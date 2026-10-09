@@ -1,0 +1,35 @@
+if TARGET_P2812HNUF1_RAM
+
+config SYS_BOARD
+	default "p2812hnuf1"
+
+config SYS_VENDOR
+	default "zyxel"
+
+config SYS_CONFIG_NAME
+	default "p2812hnuf1_ram"
+
+config CMD_P2812_NANDKLOAD
+	bool "Bounded P2812 NAND kernel read/verify command"
+	depends on NAND_LANTIQ_RO && CMD_BOOTM
+	help
+	  Fixed partition and RAM address, ECC and CRC checked.
+	  No decompression, Linux execution or persistent modification.
+
+config CMD_P2812_NANDBOOTCHECK
+	bool "P2812 interruptible read-only autoboot rehearsal"
+	depends on CMD_P2812_NANDKLOAD && LMB
+	help
+	  Default bootcmd may read, verify and decompress the kernel, then
+	  invalidate bootm state and return to the console. Never runs Linux.
+	  In this profile bootm decompression errors return instead of reset.
+
+config CMD_P2812_LINUXRUN
+	bool "P2812 manual fixed NAND/RAM Linux handoff"
+	depends on CMD_P2812_NANDKLOAD && LMB && BOOTM_LINUX
+	help
+	  Verify the fixed input and run bootm through Linux PREP and GO.
+	  Retain the output reservation through handoff; clean up on failure.
+	  Does not enable NAND programming or persistent environment writes.
+
+endif
