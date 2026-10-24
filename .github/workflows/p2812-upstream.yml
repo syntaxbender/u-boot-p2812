@@ -1,0 +1,87 @@
+name: P2812 stable upstream build and release
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'p2812-ci/**'
+      - '.github/workflows/p2812-upstream.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p2812-stable-release
+  cancel-in-progress: false
+
+jobs:
+  build-release:
+    if: github.repository == 'syntaxbender/u-boot-p2812' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - name: Check out automation and patch recipe
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Select a fresh runner work directory
+        run: printf 'WORK=%s/p2812-stable\n' "$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - name: Check the stable selection and publication control logic offline
+        run: python3 -B -m unittest discover -s p2812-ci -p 'test_controller.py'
+      - name: Discover the newest stable upstream tag
+        id: upstream
+        run: python3 -B p2812-ci/controller.py discover --work "$WORK"
+      - name: Keep the quarterly-release monitor active
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -B p2812-ci/controller.py heartbeat
+      - name: Build the Linux AMD64 tools from the pinned public recipe
+        if: steps.upstream.outputs.build == 'true'
+        run: python3 -B p2812-ci/controller.py builder --work "$WORK"
+      - name: Apply the pinned P2812 port to clean upstream sources
+        if: steps.upstream.outputs.build == 'true'
+        run: python3 -B p2812-ci/controller.py prepare --work "$WORK"
+      - name: Fetch checksum-verified public build and test inputs
+        if: steps.upstream.outputs.build == 'true'
+        run: python3 -B "$WORK/source/tools/p2812/nandfinal1/ci_inputs.py" "$WORK/inputs" --no-builder
+      - name: Build and model-test twice in independent offline containers
+        if: steps.upstream.outputs.build == 'true'
+        run: |
+          python3 -B "$WORK/source/tools/p2812/nandfinal1/run.py" "$WORK/run1" --builder-record "$WORK/builder-record.json" --wheel "$WORK/inputs/unicorn.whl" --sysupgrade "$WORK/inputs/sysupgrade.bin" --initramfs "$WORK/inputs/initramfs.bin"
+          python3 -B "$WORK/source/tools/p2812/nandfinal1/run.py" "$WORK/run2" --builder-record "$WORK/builder-record.json" --wheel "$WORK/inputs/unicorn.whl" --sysupgrade "$WORK/inputs/sysupgrade.bin" --initramfs "$WORK/inputs/initramfs.bin"
+          python3 -B "$WORK/source/tools/p2812/nandfinal1/compare.py" "$WORK/run1" "$WORK/run2"
+      - name: Verify firmware provenance and prepare release assets
+        if: steps.upstream.outputs.build == 'true'
+        run: python3 -B p2812-ci/controller.py package --work "$WORK"
+      - name: Publish versioned patched sources and the complete release
+        if: steps.upstream.outputs.build == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -B p2812-ci/controller.py publish --work "$WORK"
+      - name: Preserve build evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2812-stable-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 7
+          path: |
+            ${{ env.WORK }}/selection.json
+            ${{ env.WORK }}/builder-record.json
+            ${{ env.WORK }}/builder-build.log
+            ${{ env.WORK }}/port-diffstat.txt
+            ${{ env.WORK }}/release-notes.md
+            ${{ env.WORK }}/release-assets/
+            ${{ env.WORK }}/run1/summary.json
+            ${{ env.WORK }}/run1/console.log
+            ${{ env.WORK }}/run1/results/*.json
+            ${{ env.WORK }}/run1/results/*.log
+            ${{ env.WORK }}/run1/results/main/build.log
+            ${{ env.WORK }}/run2/summary.json
+            ${{ env.WORK }}/run2/console.log
+            ${{ env.WORK }}/run2/reproducibility.json

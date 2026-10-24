@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "repository": "syntaxbender/u-boot-p2812",
+  "default_branch": "main",
+  "upstream_repository": "https://github.com/u-boot/u-boot.git",
+  "upstream_channel": "stable",
+  "poll_interval_hours": 6,
+  "port_patch_sha256": "9d017b7cc120f1a8b1ef1d5e4ea02c0dbfa701abe97f378e54cd29ad02bd8d2d",
+  "hardware_reference_upstream": "5508406582f6f7120dce0c4b3059819a41788db2",
+  "hardware_reference_source": "91ba975ced2bbb0a2c37085119cea11373991ce8",
+  "hardware_reference_files": {
+    "boot-main-256k.bin": "c6e638f37065f5ced532676689a69e9f7a3ec1fd8f5f680824676424c22b2ec9",
+    "boot-main-oob.bin": "1845eba94926c51f2041762b9d05db3773b10c95dbe616b11552dbfc71f11d2c",
+    "nandfinal1-main-area.img": "70fb630907a7c67907beac766fe67d2273dfd2540d8499a07cdc00a5b40bc849",
+    "u-boot.bin": "1bf10626ed76045f8c7cbb2dc306cb3956719a7894984547d62b8df641e823e8",
+    "u-boot.bin.lzo": "3fd9666392a45e8b1de8e8603479525ab432c6fc117155d612c29efa632a3111",
+    "u-boot.uImage": "68b63bfe3cc74fd4c566fac1cd52a89cb8ff7b6cd2124ea0a98b2894c609e382"
+  },
+  "baseline_epoch": 1791504000,
+  "builder_recipe_sha256": "050eeb73230621fbadeed0fa7fb11ec6123750432cf8b1e8c9cb72d58803d9fc",
+  "builder_packages_sha256": "6f4a59cb1cd8a53f8bf7ad5e29413b48b5b5b2f0cf8dfae71243886a7f501635",
+  "builder_base_image": "debian:bookworm-slim@sha256:7c7b2c966bc9ee8cedfeef67e0e279108992c77681fa595db4a9d65c06ccc587",
+  "builder_snapshot": "20261010T000000Z"
+}
