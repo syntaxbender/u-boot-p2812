@@ -1,0 +1,60 @@
+name: P2812 OpenWrt AVM DSL verification
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'p2812-openwrt/dsl/**'
+      - '.github/workflows/p2812-dsl-avm.yml'
+  pull_request:
+    paths:
+      - 'p2812-openwrt/dsl/**'
+      - '.github/workflows/p2812-dsl-avm.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out source recipes
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install extraction build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential patch liblzma-dev bsdiff
+      - name: Fetch official images and hash-locked extraction sources
+        run: python3 -B p2812-openwrt/dsl/verify_avm.py --fetch-only --cache "$RUNNER_TEMP/dsl-inputs" --work "$RUNNER_TEMP/dsl-verify"
+      - name: Test DSM hook generation and refusal of unexpected inputs
+        run: python3 -B -m unittest discover -s p2812-openwrt/dsl -p 'test_*.py'
+        env:
+          P2812_DSL_INPUTS: ${{ runner.temp }}/dsl-inputs
+      - name: Extract AVM DSL and verify the OpenWrt overlay against the installed recipe
+        run: python3 -B p2812-openwrt/dsl/verify_avm.py --cache "$RUNNER_TEMP/dsl-inputs" --work "$RUNNER_TEMP/dsl-verify"
+      - name: Package the source recipe
+        run: |
+          python3 -B - <<'PY'
+          import os
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          paths = sorted(Path('p2812-openwrt/dsl').iterdir())
+          paths.append(Path('.github/workflows/p2812-dsl-avm.yml'))
+          with ZipFile(Path(os.environ['RUNNER_TEMP']) / 'p2812-dsl-recipe.zip', 'w', ZIP_DEFLATED) as archive:
+              for path in paths:
+                  if path.is_file() and path.suffix in {'.py', '.json', '.md', '.yml'}:
+                      archive.write(path, str(path))
+          PY
+      - name: Retain verification manifest and source recipe
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p2812-avm-dsl-verification
+          path: |
+            ${{ runner.temp }}/dsl-verify/verification.json
+            ${{ runner.temp }}/p2812-dsl-recipe.zip
+          if-no-files-found: error
+          retention-days: 30

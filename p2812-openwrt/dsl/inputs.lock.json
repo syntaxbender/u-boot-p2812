@@ -1,0 +1,140 @@
+{
+  "vendor_image": {
+    "name": "FRITZ.Box_7490-07.62.image",
+    "url": "https://download.avm.de/fritzbox/fritzbox-7490/deutschland/fritz.os/FRITZ.Box_7490-07.62.image",
+    "sha256": "2ab05656563abe7fabdbbf62b3305123098b798e6f79c678f00baefc553f8ee9",
+    "bytes": 38092800
+  },
+  "filesystem_sha256": "58d73b2f490a0fd22b49154382d7d5726d9813efdfae490d8cba0f12433474e5",
+  "squashfs": {
+    "name": "squashfs4.3.tar.gz",
+    "url": "https://downloads.sourceforge.net/project/squashfs/squashfs/squashfs4.3/squashfs4.3.tar.gz",
+    "sha256": "0d605512437b1eb800b4736791559295ee5f60177e102e4d4ccd0ee241a5f3f6"
+  },
+  "freetz_commit": "28a3e5611371dbfbb361db7f51e9410a87529d4c",
+  "patches": [
+    {
+      "name": "001-de03266983ceb62e5365aac84fcd3b2fd4d16e6f.upstream.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/001-de03266983ceb62e5365aac84fcd3b2fd4d16e6f.upstream.patch",
+      "sha256": "bae91a1ffd6ac606d8994a3aaa5f6e464fdb5c3d7b4a4026618d01a44c96b72d"
+    },
+    {
+      "name": "002-4f24381e7edc0a46cf10278e4597051ac697ec7c.upstream.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/002-4f24381e7edc0a46cf10278e4597051ac697ec7c.upstream.patch",
+      "sha256": "1043d02de11d981d46ee86c26d4d6b0d69406b406501d14ca4ad20c4409c7a7a"
+    },
+    {
+      "name": "010-fix_segfault_in_tracing_code.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/010-fix_segfault_in_tracing_code.patch",
+      "sha256": "90d2e0fc96f102466b023169a945aa5a0668016afc98b622dc6630a8d900358e"
+    },
+    {
+      "name": "050-freetz_specific_xz_paths.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/050-freetz_specific_xz_paths.patch",
+      "sha256": "ede7fe7cbde8ec2395208365a3e860a61a2790cdbe1e4e4d56c8b9a953c75ea8"
+    },
+    {
+      "name": "060-link_compression_libs_statically.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/060-link_compression_libs_statically.patch",
+      "sha256": "7ddf77f29184be97742e514001985bdc02e8975179d7f88242e9ba613de6737b"
+    },
+    {
+      "name": "100-TARGET_FORMAT.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/100-TARGET_FORMAT.patch",
+      "sha256": "20783c8c2abd4d67ac5214a8fca7210fc4ec1900f4ed08dab095860ff2f8b9f8"
+    },
+    {
+      "name": "101-TARGET_FORMAT__AVM_BE_AVM_LE_symbols_only.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/101-TARGET_FORMAT__AVM_BE_AVM_LE_symbols_only.patch",
+      "sha256": "e28b3341021c4c62560f48807de5c949b7bd55b127c687399a9afc289e84c707"
+    },
+    {
+      "name": "200-help_comment_typos.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/200-help_comment_typos.patch",
+      "sha256": "275986d4f6b94de76241ca8c8164d6a188c43cee5ea94b6806e965d23bcfc428"
+    },
+    {
+      "name": "210-mksquashfs__uclibc_get_physical_memory.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/210-mksquashfs__uclibc_get_physical_memory.patch",
+      "sha256": "969887573d3fd5492894131d11123447fb1d9fce4216df8f6a133f703555ae2e"
+    },
+    {
+      "name": "220-mksquashfs__default_block_size.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/220-mksquashfs__default_block_size.patch",
+      "sha256": "a06b3254797775630072be31d964c8b884a0b6bfd626adcd61c208800d1a5ece"
+    },
+    {
+      "name": "230-mksquashfs__disable_xattrs_support.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/230-mksquashfs__disable_xattrs_support.patch",
+      "sha256": "2d566ef220782d1035d3a2d42f0bb2f048eb12f3724b5e2cb217ba693cf32554"
+    },
+    {
+      "name": "240-mksquashfs__remove_append_mode_support.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/240-mksquashfs__remove_append_mode_support.patch",
+      "sha256": "f5db0b663a24f56c2aaf0d811b31a1591486ecabfa44eefe808f7e56142502ce"
+    },
+    {
+      "name": "250-mksquashfs__AVM_BE.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/250-mksquashfs__AVM_BE.patch",
+      "sha256": "f5964ad9bf2d24d319763e28f78bd441cd1d683d087e9b2e7bcd77d1db1b908d"
+    },
+    {
+      "name": "350-unsquashfs__AVM_BE.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/350-unsquashfs__AVM_BE.patch",
+      "sha256": "7f0a1b252d4bbde747efe98d1f97b52eab28d55ee957b7307d0344cbe1e220fc"
+    },
+    {
+      "name": "400-unsquashfs123_lzma1_header_less.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/400-unsquashfs123_lzma1_header_less.patch",
+      "sha256": "90860dc2354fb851aed7af39670d7d0c747810adf5accc9b6835da9556193010"
+    },
+    {
+      "name": "410-unsquashfs123_optional.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/410-unsquashfs123_optional.patch",
+      "sha256": "adf53accb0144af006bf651a0d763ede2e76ed488a3b64feb1248a7937032af4"
+    },
+    {
+      "name": "450-unsquashfs__exit_on_error.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/450-unsquashfs__exit_on_error.patch",
+      "sha256": "134fecc79f2baf69ed6c40d5035b45d9a844bd723cda4feae0273c9b85985f69"
+    },
+    {
+      "name": "550-mkfs_time__AVM_BE_AVM_LE.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/550-mkfs_time__AVM_BE_AVM_LE.patch",
+      "sha256": "603c36c9e610a4f1a41548d167b7b984c8c7ac587c73fa5b19d1484d2aab15a7"
+    },
+    {
+      "name": "610-unsquashfs_superblock_offset.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/610-unsquashfs_superblock_offset.patch",
+      "sha256": "1ba94807d3fbb389cfe5f2429cf3659d8be520dbdf58874fe11bbd430e038ad3"
+    },
+    {
+      "name": "611-unsquashfs_nmi_vector_gap.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/611-unsquashfs_nmi_vector_gap.patch",
+      "sha256": "1933fff73c468630b3555e7e177be024c3eb340e18bed2df5fe965d0004d3b37"
+    },
+    {
+      "name": "612-ti_checksum.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/612-ti_checksum.patch",
+      "sha256": "e255cbd4b3a679ed93e637173928c54d143da11d720dc422baa59994b7647d9c"
+    },
+    {
+      "name": "900-sys_types__no__sys_sysmacros__include.patch",
+      "url": "https://raw.githubusercontent.com/Freetz-NG/freetz-ng/28a3e5611371dbfbb361db7f51e9410a87529d4c/make/host-tools/squashfs4-be-host/patches/900-sys_types__no__sys_sysmacros__include.patch",
+      "sha256": "78fc4cdaad96fd817fb1fcfcb9750d92388adee48bcc1c704eb643024286d842"
+    }
+  ],
+  "openwrt_init": {
+    "name": "dsl_control",
+    "url": "https://raw.githubusercontent.com/openwrt/openwrt/v25.12.0/package/network/config/ltq-vdsl-vr9-app/files/dsl_control",
+    "sha256": "f704597b4993e7c38b0a8b389df88bcfcfd59b7fa12715b97bec961a76efbb0a"
+  },
+  "firmware": {
+    "sha256": "11b90138e69fd8b50df1b037b69d1f0e908750f344d895d8ac9b0862e3420d7a",
+    "bytes": 927124,
+    "version": "5.9.1.4.0.7",
+    "md5": "8eee9b44e8c1efd9e5724dfdf3e82348"
+  },
+  "expected_init_sha256": "4176e76daa09bb6bb31651f7c0c9d0b63bd93304a83b5f247d9db4d9565415fa",
+  "qualification": "P2812 firmware load, DSM requested1 and DSL/PPPoE/ping/HTTPS verified. Active vectoring not observed on test line; no guarantee for other lines."
+}
