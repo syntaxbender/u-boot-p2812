@@ -59,6 +59,8 @@ def configuration():
     need(re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', c['repository']) and
          c['repository'] != 'u-boot/u-boot', 'An owned fork is required')
     need(sha(KIT / 'port.patch') == c['port_patch_sha256'], 'Port patch SHA differs')
+    need(re.fullmatch(r'[0-9a-f]{64}', c.get('hardware_reference_port_patch_sha256', c['port_patch_sha256'])),
+         'Hardware-reference port identity differs')
     need(environment_id() == c['builder_recipe_sha256'], 'Build environment recipe differs')
     need(sha(KIT / 'builder/packages.lock') == c['builder_packages_sha256'], 'Package inventory differs')
     return c
@@ -274,7 +276,9 @@ def package(c, work):
         hashes[name] = sha(p)
         shutil.copyfile(p, assets / name)
     reference_match = hashes == c['hardware_reference_files']
-    if selection['upstream_commit'] == c['hardware_reference_upstream']:
+    reference_source_match = (selection['upstream_commit'] == c['hardware_reference_upstream'] and
+        c['port_patch_sha256'] == c.get('hardware_reference_port_patch_sha256', c['port_patch_sha256']))
+    if reference_source_match:
         need(reference_match, 'Baseline firmware differs from the hardware-tested reference')
     raw_source = regular(first / 'inputs/source.tar', first / 'inputs')
     with (assets / 'source.tar.gz').open('xb') as f:
@@ -287,6 +291,8 @@ def package(c, work):
                     public_test_inputs_sha256=summaries[0]['public_inputs_sha256'],
                     independent_clean_builds=2, identical_outputs=repro['identical_outputs'],
                     firmware_sha256=hashes, matches_hardware_tested_reference=reference_match,
+                    matches_hardware_tested_source_recipe=reference_source_match,
+                    hardware_reference_port_patch_sha256=c.get('hardware_reference_port_patch_sha256', c['port_patch_sha256']),
                     actual_hardware_test_performed_by_this_CI=False, automatic_flashing=False)
     write_json(assets / 'build-manifest.json', manifest)
     shutil.copyfile(work / 'port-diffstat.txt', assets / 'port-diffstat.txt')
@@ -302,7 +308,8 @@ def package(c, work):
         for run, prefix in ((first, 'run1'), (second, 'run2')):
             z.write(regular(run / 'summary.json', run), prefix + '/summary.json')
             for name in ('audit.json', 'linuxrun-mips-tests.json', 'autoboot-tests.json',
-                         'mips-tests.json', 'native-tests.json', 'main/startup-cache-tests.json'):
+                         'mips-tests.json', 'native-tests.json', 'main/startup-cache-tests.json',
+                         'main/mdio-handoff-tests.json'):
                 z.write(regular(run / 'results' / name, run / 'results'), prefix + '/' + name)
         z.write(second / 'reproducibility.json', 'reproducibility.json')
     lines = [sha(p) + '  ' + p.name for p in sorted(assets.iterdir())]
@@ -314,7 +321,7 @@ def package(c, work):
              f'{selection["upstream_commit"]}...{selection["source_commit"]}). '
              '`port-diffstat.txt` lists changed files and line counts; `ci-recipe.zip` contains the build recipe.\n\n'
              f'Two clean offline builds passed; {repro["identical_outputs"]} outputs matched. '
-             'SPL/TPL, ECC/LZO, startup, autoboot and Linux handoff models passed.\n\n'
+             'SPL/TPL, ECC/LZO, startup, MDIO pin handoff, autoboot and Linux handoff models passed.\n\n'
              f'Matches previously hardware-tested firmware hashes: **{reference_match}**. '
              'This CI run does not execute hardware tests or flash a modem.\n\n'
              '`source.tar.gz` is the exact patched source used for the binaries. '

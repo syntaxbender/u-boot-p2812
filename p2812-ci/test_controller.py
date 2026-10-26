@@ -113,6 +113,7 @@ class Preparation(unittest.TestCase):
 class Packaging(unittest.TestCase):
     def fixture(self, root):
         cfg = copy.deepcopy(c.configuration())
+        cfg['hardware_reference_port_patch_sha256'] = cfg['port_patch_sha256']
         selection = dict(upstream_tag='v2026.10', upstream_commit=cfg['hardware_reference_upstream'],
                          recipe_sha256=c.recipe_id(), release_tag='synthetic-test-release',
                          source_commit='b'*40, source_tree='c'*40, source_date_epoch=1791504000,
@@ -132,7 +133,8 @@ class Packaging(unittest.TestCase):
             for file in cfg['hardware_reference_files']:
                 (run/'results/package'/file).write_bytes(('synthetic-'+file).encode())
             for file in ('audit.json','linuxrun-mips-tests.json','autoboot-tests.json',
-                         'mips-tests.json','native-tests.json','main/startup-cache-tests.json'):
+                         'mips-tests.json','native-tests.json','main/startup-cache-tests.json',
+                         'main/mdio-handoff-tests.json'):
                 c.write_json(run/'results'/file, {'passed':True,'synthetic':True})
             (run/'inputs/source.tar').write_bytes(b'SYNTHETIC SOURCE FIXTURE')
         c.write_json(root/'run2/reproducibility.json', {'passed':True,'identical_outputs':27})
@@ -170,6 +172,20 @@ class Packaging(unittest.TestCase):
             self.assertFalse(manifest['automatic_flashing'])
             for line in (root/'release-assets/SHA256SUMS').read_text().splitlines():
                 digest,name=line.split('  ',1);self.assertEqual(digest,c.sha(root/'release-assets'/name))
+
+    def test_reviewed_port_update_keeps_old_hardware_identity(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);cfg=self.fixture(root)
+            old_patch='0'*64
+            self.assertNotEqual(old_patch,cfg['port_patch_sha256'])
+            cfg['hardware_reference_port_patch_sha256']=old_patch
+            cfg['hardware_reference_files']['u-boot.bin']='0'*64
+            c.package(cfg,root)
+            manifest=json.loads((root/'release-assets/build-manifest.json').read_text())
+            self.assertFalse(manifest['matches_hardware_tested_reference'])
+            self.assertFalse(manifest['matches_hardware_tested_source_recipe'])
+            self.assertEqual(manifest['hardware_reference_port_patch_sha256'],old_patch)
+            self.assertFalse(manifest['actual_hardware_test_performed_by_this_CI'])
 
     def test_new_upstream_does_not_claim_hardware_equivalence(self):
         with tempfile.TemporaryDirectory() as td:

@@ -5,7 +5,7 @@
   "upstream_repository": "https://github.com/u-boot/u-boot.git",
   "upstream_channel": "stable",
   "poll_interval_hours": 6,
-  "port_patch_sha256": "9d017b7cc120f1a8b1ef1d5e4ea02c0dbfa701abe97f378e54cd29ad02bd8d2d",
+  "port_patch_sha256": "70188f1e863cca87b01d991ba14f9861290e20a442fa8d1afd1a99bfd149ac50",
   "hardware_reference_upstream": "5508406582f6f7120dce0c4b3059819a41788db2",
   "hardware_reference_source": "91ba975ced2bbb0a2c37085119cea11373991ce8",
   "hardware_reference_files": {
@@ -20,5 +20,6 @@
   "builder_recipe_sha256": "050eeb73230621fbadeed0fa7fb11ec6123750432cf8b1e8c9cb72d58803d9fc",
   "builder_packages_sha256": "6f4a59cb1cd8a53f8bf7ad5e29413b48b5b5b2f0cf8dfae71243886a7f501635",
   "builder_base_image": "debian:bookworm-slim@sha256:7c7b2c966bc9ee8cedfeef67e0e279108992c77681fa595db4a9d65c06ccc587",
-  "builder_snapshot": "20261010T000000Z"
+  "builder_snapshot": "20261010T000000Z",
+  "hardware_reference_port_patch_sha256": "9d017b7cc120f1a8b1ef1d5e4ea02c0dbfa701abe97f378e54cd29ad02bd8d2d"
 }

@@ -848,10 +848,10 @@ index 00000000..fd8008fd
 +#endif
 diff --git a/board/zyxel/p2812hnuf1/p2812hnuf1.c b/board/zyxel/p2812hnuf1/p2812hnuf1.c
 new file mode 100644
-index 00000000..3212a5ad
+index 00000000..8685eb26
 --- /dev/null
 +++ b/board/zyxel/p2812hnuf1/p2812hnuf1.c
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,69 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/* Experimental P-2812HNU-F1 RAM board; persistent environment absent. */
 +#include <command.h>
@@ -860,6 +860,7 @@ index 00000000..3212a5ad
 +#include <time.h>
 +#include <asm/global_data.h>
 +#include <asm/mipsregs.h>
++#include <asm/io.h>
 +#include <linux/sizes.h>
 +#include <mach/vrx200.h>
 +
@@ -880,8 +881,23 @@ index 00000000..3212a5ad
 +	return 0;
 +}
 +
++/* Legacy external-PHY setup also initialized these pins. The minimal port
++ * has no Ethernet driver, so establish the MDIO/MDC handoff explicitly.
++ * GPIO42/43 are bank2 bits10/11; preserve all other pins. XWAY OD=1
++ * corresponds to the Linux pinctrl open-drain=0 setting. */
++static void p2812_mdio_pins_init(void)
++{
++	const u32 mask = 0x00000c00;
++
++	setbits_be32((void __iomem *)0xbe100b7c, mask); /* ALTSEL0 */
++	clrbits_be32((void __iomem *)0xbe100b80, mask); /* ALTSEL1 */
++	setbits_be32((void __iomem *)0xbe100b84, mask); /* OD */
++	setbits_be32((void __iomem *)0xbe100b78, mask); /* DIR */
++}
++
 +int board_early_init_r(void)
 +{
++	p2812_mdio_pins_init();
 +	if (IS_ENABLED(CONFIG_NAND_LANTIQ_RO))
 +		puts("RAM prototype: NAND explicit-probe/read-only; persistent env absent\n");
 +	else
@@ -1230,7 +1246,7 @@ index 00000000..39bcb25a
 +CONFIG_CMD_P2812_NANDBOOTCHECK=y
 diff --git a/configs/p2812hnuf1_nandfinal1_defconfig b/configs/p2812hnuf1_nandfinal1_defconfig
 new file mode 100644
-index 00000000..20598ed5
+index 00000000..cc4983f7
 --- /dev/null
 +++ b/configs/p2812hnuf1_nandfinal1_defconfig
 @@ -0,0 +1,85 @@
@@ -1251,7 +1267,7 @@ index 00000000..20598ed5
 +CONFIG_OF_EMBED=y
 +CONFIG_LOCALVERSION="-p2812-nandfinal1"
 +# CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_IDENT_STRING=" P2812HNU-F1 NAND Linux autoboot candidate"
++CONFIG_IDENT_STRING=" P2812HNU-F1 NAND Linux autoboot candidate MDIO1"
 +CONFIG_SYS_PROMPT="P2812-2026-NANDFINAL1> "
 +CONFIG_HUSH_PARSER=y
 +CONFIG_CMD_BDI=y
@@ -4347,10 +4363,10 @@ index 00000000..e446f151
 +PYVERSION
 diff --git a/tools/p2812/nandfinal1/build.sh b/tools/p2812/nandfinal1/build.sh
 new file mode 100644
-index 00000000..c7f91dc4
+index 00000000..02174bbb
 --- /dev/null
 +++ b/tools/p2812/nandfinal1/build.sh
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,21 @@
 +#!/bin/bash
 +set -euo pipefail
 +export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1791504000}" TZ=UTC LC_ALL=C PYTHONDONTWRITEBYTECODE=1
@@ -4361,6 +4377,7 @@ index 00000000..c7f91dc4
 +    --initramfs /inputs/initramfs.bin > "$out/fixtures.log" 2>&1
 +python3 "$kit/test_mips.py" "$out" --fixtures "$out/fixtures" > "$out/linuxrun-mips-tests.log" 2>&1
 +python3 "$kit/test_autoboot.py" "$out" > "$out/autoboot-tests.log" 2>&1
++python3 "$kit/test_mdio_handoff.py" "$out/main" > "$out/mdio-handoff-tests.log" 2>&1
 +python3 "$kit/test_startup.py" "$out/main" > "$out/startup-tests.log" 2>&1
 +mkdir "$out/package"
 +python3 "$kit/package.py" main "$out"
@@ -5596,6 +5613,65 @@ index 00000000..96bf0c13
 +  'valid_decode':1,'truncations':160,'decoder_token_inputs':5000,
 +  'single_bits_corrected':2048,'adjacent_double_bits_rejected':2047,'hardware_access':False}
 + (out/'native-tests.json').write_text(json.dumps(report,indent=2)+'\n')
++if __name__=='__main__':main()
+diff --git a/tools/p2812/nandfinal1/test_mdio_handoff.py b/tools/p2812/nandfinal1/test_mdio_handoff.py
+new file mode 100644
+index 00000000..f01ddb00
+--- /dev/null
++++ b/tools/p2812/nandfinal1/test_mdio_handoff.py
+@@ -0,0 +1,53 @@
++#!/usr/bin/env python3
++"""Execute compiled post-relocation board hook with bounded GPIO register models.
++
++No actual MMIO/electrical PHY behavior or complete board-init sequence emulated.
++Only console puts is stubbed. The actual compiled GPIO code executes unchanged.
++"""
++import argparse,hashlib,json,platform,random,struct,sys,tempfile,zipfile
++from pathlib import Path
++from model_support import prepare,physical,TEXT,RELOC,GD,SENTINEL
++WHEEL_SHA='9d6e6dea140560de4ebd8446661f7ef84a357d428c14a3ef09dacd306ec8c239'
++REGS=[0x1e100b78,0x1e100b84,0x1e100b7c,0x1e100b80]
++ORDER=[REGS[2],REGS[3],REGS[1],REGS[0]]
++def main():
++ p=argparse.ArgumentParser();p.add_argument('main',type=Path);a=p.parse_args();assert platform.system()=='Linux'
++ wheel=Path('/inputs/unicorn.whl');assert hashlib.sha256(wheel.read_bytes()).hexdigest()==WHEEL_SHA
++ assert 'CONFIG_BOARD_EARLY_INIT_R=y' in (a.main/'.config').read_text()
++ syms,f,raw,relocs=prepare(a.main);addr=lambda n:syms[n]+RELOC-TEXT
++ cases=[];rng=random.Random(2812)
++ inputs=[('cold',[0x800,0x400,0,0]),('zero',[0]*4),('already',[0xc00]*3+[0]),('random',[rng.getrandbits(32) for i in range(4)])]
++ with tempfile.TemporaryDirectory(prefix='p2812-mdio-') as tmp:
++  with zipfile.ZipFile(wheel) as z:
++   assert all(not Path(n).is_absolute() and '..' not in Path(n).parts for n in z.namelist());z.extractall(tmp)
++  sys.path.insert(0,tmp)
++  from unicorn import Uc,UC_ARCH_MIPS,UC_MODE_MIPS32,UC_MODE_BIG_ENDIAN,UC_HOOK_CODE,UC_HOOK_MEM_WRITE
++  import unicorn.mips_const as m
++  for name,before in inputs:
++   u=Uc(UC_ARCH_MIPS,UC_MODE_MIPS32|UC_MODE_BIG_ENDIAN);u.ctl_set_cpu_model(m.UC_CPU_MIPS32_34KF)
++   u.mem_map(physical(RELOC),0x100000);u.mem_map(0x3000000,0x500000);u.mem_map(0x1e100000,0x10000)
++   u.mem_write(physical(RELOC),raw);u.reg_write(m.UC_MIPS_REG_K0,GD)
++   for reg,v in zip(REGS,before):u.mem_write(reg,struct.pack('>I',v))
++   writes=[]
++   def store(uc,access,address,size,value,_):
++    address=physical(address)
++    if 0x1e100000<=address<0x1e110000:
++     assert address in REGS and size==4,('UnexpectedGPIOwrite',hex(address),size)
++     writes.append(address)
++   def code(uc,pc,size,_):
++    if pc==addr('puts'):
++     uc.reg_write(m.UC_MIPS_REG_V0,0);uc.reg_write(m.UC_MIPS_REG_PC,uc.reg_read(m.UC_MIPS_REG_RA))
++   u.hook_add(UC_HOOK_MEM_WRITE,store);u.hook_add(UC_HOOK_CODE,code)
++   expected=[before[0]|0xc00,before[1]|0xc00,before[2]|0xc00,before[3]&~0xc00]
++   for repeat in range(2):
++    u.reg_write(m.UC_MIPS_REG_SP,0xa33fe000);u.reg_write(m.UC_MIPS_REG_RA,SENTINEL)
++    u.emu_start(addr('board_early_init_r'),SENTINEL,count=10000)
++    assert u.reg_read(m.UC_MIPS_REG_PC)==SENTINEL and u.reg_read(m.UC_MIPS_REG_SP)==0xa33fe000
++    assert u.reg_read(m.UC_MIPS_REG_V0)==0
++    after=[struct.unpack('>I',u.mem_read(reg,4))[0] for reg in REGS]
++    assert after==expected and writes[repeat*4:]==ORDER,(name,repeat,after,writes)
++    assert all(((x^y)&~0xc00)==0 for x,y in zip(before,after))
++   cases.append({'name':name,'passed':True,'calls':2,'GPIO_writes_per_call':4,'outside_mask_unchanged':True,'idempotent':True,'caller_SP_preserved':True})
++ result={'passed':True,'hardware_access':False,'real_function':'board_early_init_r','raw_sha256':hashlib.sha256((a.main/'u-boot.bin').read_bytes()).hexdigest(),'relocations':relocs,'cases':cases,'limits':'ActualcompiledGPIOcode/registermodels; putsstub; nofullboot/electricalPHY/DDR/NANDproof.'}
++ (a.main/'mdio-handoff-tests.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
 +if __name__=='__main__':main()
 diff --git a/tools/p2812/nandfinal1/test_mips.py b/tools/p2812/nandfinal1/test_mips.py
 new file mode 100644
