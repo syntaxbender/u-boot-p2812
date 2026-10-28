@@ -321,7 +321,7 @@ def package(c, work):
              f'{selection["upstream_commit"]}...{selection["source_commit"]}). '
              '`port-diffstat.txt` lists changed files and line counts; `ci-recipe.zip` contains the build recipe.\n\n'
              f'Two clean offline builds passed; {repro["identical_outputs"]} outputs matched. '
-             'SPL/TPL, ECC/LZO, startup, MDIO pin handoff, autoboot and Linux handoff models passed.\n\n'
+             'SPL/TPL, ECC/LZO, startup, MDIO pin/GPHY clock handoff, autoboot and Linux handoff models passed.\n\n'
              f'Matches previously hardware-tested firmware hashes: **{reference_match}**. '
              'This CI run does not execute hardware tests or flash a modem.\n\n'
              '`source.tar.gz` is the exact patched source used for the binaries. '

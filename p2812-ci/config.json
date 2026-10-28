@@ -5,7 +5,7 @@
   "upstream_repository": "https://github.com/u-boot/u-boot.git",
   "upstream_channel": "stable",
   "poll_interval_hours": 6,
-  "port_patch_sha256": "70188f1e863cca87b01d991ba14f9861290e20a442fa8d1afd1a99bfd149ac50",
+  "port_patch_sha256": "c9239fa28cf9bb98261b3bab255f5a430e3e1fcd9cc309922eb526005a04b5b0",
   "hardware_reference_upstream": "5508406582f6f7120dce0c4b3059819a41788db2",
   "hardware_reference_source": "91ba975ced2bbb0a2c37085119cea11373991ce8",
   "hardware_reference_files": {
